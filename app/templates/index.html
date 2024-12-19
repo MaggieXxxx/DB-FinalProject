@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Care Subscription Facilitator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar-container" class="navbar">
+        <div class="title">
+            <h1>Mental Health Care Subscription Facilitator</h1>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="left-link">
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('profile') }}">Patient Profile</a>
+            <a href="{{ url_for('generate_quote') }}">Generate Subscription Plan</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content-container">
+        {% block content %}
+        <div class="welcome-message">
+            <h2>Welcome to the Mental Health Care Subscription Facilitator</h2>
+            <p>
+                This system helps you find the right subscription plan based on your needs. 
+                Log in to manage your profile, view your details, and generate your personalized subscription plan.
+            </p>
+        </div>
+        {% endblock content %}
+    </div>
+
+</body>
+</html>

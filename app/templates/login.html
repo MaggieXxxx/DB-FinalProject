@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        select {
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <form action="/login" method="POST">
+        <h1>Login</h1>
+        <!-- Name -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+        <!-- Age Group -->
+        <label for="age">Age Group:</label>
+        <select id="age" name="age">
+            <option value="18 - 29 years">18 - 29 years</option>
+            <option value="30 - 39 years">30 - 39 years</option>
+            <option value="40 - 49 years">40 - 49 years</option>
+            <option value="50 - 59 years">50 - 59 years</option>
+            <option value="60 - 69 years">60 - 69 years</option>
+            <option value="70 - 79 years">70 - 79 years</option>
+            <option value="80 years and above">80 years and above</option>
+        </select>
+
+        <!-- Sex -->
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex">
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+        </select>
+
+        <!-- Disability Status -->
+        <label for="disability_status">Disability Status:</label>
+        <select id="disability_status" name="disability_status">
+            <option value="With disability">With disability</option>
+            <option value="Without disability">Without disability</option>
+        </select>
+
+        <!-- Education -->
+        <label for="education">Education Level:</label>
+        <select id="education" name="education">
+            <option value="Less than a high school diploma">Less than a high school diploma</option>
+            <option value="High school diploma or GED">High school diploma or GED</option>
+            <option value="Some college/Associate's degree">Some college/Associate's degree</option>
+            <option value="Bachelor's degree or higher">Bachelor's degree or higher</option>
+        </select>
+
+        <!-- Gender Identity -->
+        <label for="gender_identity">Gender Identity:</label>
+        <select id="gender_identity" name="gender_identity">
+            <option value="Cis-gender female">Cis-gender female</option>
+            <option value="Cis-gender male">Cis-gender male</option>
+            <option value="Transgender">Transgender</option>
+        </select>
+
+        <!-- Symptoms -->
+        <label for="symptoms">Presence of Symptoms:</label>
+        <select id="symptoms" name="symptoms">
+            <option value="Did not experience symptoms of anxiety/depression in the past 4 weeks">Did not experience symptoms of anxiety/depression in the past 4 weeks</option>
+            <option value="Experienced symptoms of anxiety/depression in past 4 weeks">Experienced symptoms of anxiety/depression in past 4 weeks</option>
+        </select>
+
+        <!-- Race/Ethnicity -->
+        <label for="race">Race/Ethnicity:</label>
+        <select id="race" name="race">
+            <option value="Hispanic or Latino">Hispanic or Latino</option>
+            <option value="Non-Hispanic Asian, single race">Non-Hispanic Asian, single race</option>
+            <option value="Non-Hispanic Black, single race">Non-Hispanic Black, single race</option>
+            <option value="Non-Hispanic White, single race">Non-Hispanic White, single race</option>
+            <option value="Non-Hispanic, other races and multiple races">Non-Hispanic, other races and multiple races</option>
+        </select>
+
+        <!-- Sexual Orientation -->
+        <label for="sexual_orientation">Sexual Orientation:</label>
+        <select id="sexual_orientation" name="sexual_orientation">
+            <option value="Straight">Straight</option>
+            <option value="Bisexual">Bisexual</option>
+            <option value="Gay or lesbian">Gay or lesbian</option>
+        </select>
+
+        <!-- State -->
+        <label for="state">State:</label>
+        <select id="state" name="state">
+            <option value="Alabama">Alabama</option>
+            <option value="Alaska">Alaska</option>
+            <option value="Arizona">Arizona</option>
+            <option value="Arkansas">Arkansas</option>
+            <option value="California">California</option>
+            <option value="Colorado">Colorado</option>
+            <option value="Connecticut">Connecticut</option>
+            <option value="Delaware">Delaware</option>
+            <option value="District of Columbia">District of Columbia</option>
+            <option value="Florida">Florida</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Hawaii">Hawaii</option>
+            <option value="Idaho">Idaho</option>
+            <option value="Illinois">Illinois</option>
+            <option value="Indiana">Indiana</option>
+            <option value="Iowa">Iowa</option>
+            <option value="Kansas">Kansas</option>
+            <option value="Kentucky">Kentucky</option>
+            <option value="Louisiana">Louisiana</option>
+            <option value="Maine">Maine</option>
+            <option value="Maryland">Maryland</option>
+            <option value="Massachusetts">Massachusetts</option>
+            <option value="Michigan">Michigan</option>
+            <option value="Minnesota">Minnesota</option>
+            <option value="Mississippi">Mississippi</option>
+            <option value="Missouri">Missouri</option>
+            <option value="Montana">Montana</option>
+            <option value="Nebraska">Nebraska</option>
+            <option value="Nevada">Nevada</option>
+            <option value="New Hampshire">New Hampshire</option>
+            <option value="New Jersey">New Jersey</option>
+            <option value="New Mexico">New Mexico</option>
+            <option value="New York">New York</option>
+            <option value="North Carolina">North Carolina</option>
+            <option value="North Dakota">North Dakota</option>
+            <option value="Ohio">Ohio</option>
+            <option value="Oklahoma">Oklahoma</option>
+            <option value="Oregon">Oregon</option>
+            <option value="Pennsylvania">Pennsylvania</option>
+            <option value="Rhode Island">Rhode Island</option>
+            <option value="South Carolina">South Carolina</option>
+            <option value="South Dakota">South Dakota</option>
+            <option value="Tennessee">Tennessee</option>
+            <option value="Texas">Texas</option>
+            <option value="Utah">Utah</option>
+            <option value="Vermont">Vermont</option>
+            <option value="Virginia">Virginia</option>
+            <option value="Washington">Washington</option>
+            <option value="West Virginia">West Virginia</option>
+            <option value="Wisconsin">Wisconsin</option>
+            <option value="Wyoming">Wyoming</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="content-box" id="welcome">
+        {% if patient %}
+            <h1>Welcome, {{ session['patient']['Name'] }}!</h1>
+            <p>Select an option from the navigation menu to get started.</p>
+        {% else %}
+            <h1>Welcome!</h1>
+            <p>Please log in to view your profile.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
