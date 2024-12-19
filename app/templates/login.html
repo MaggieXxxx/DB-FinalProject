@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             align-items: center;
             height: 100vh;
         }
+
         .login-container {
             width: 100%;
             max-width: 400px;
@@ -23,18 +25,32 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
+
         h1 {
             text-align: center;
             color: #007BFF;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            margin-right: 40px
         }
+
+        .header-message {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 40px;
+            margin-right: 40px
+        }
+
         label {
             display: block;
             margin-bottom: 5px;
             color: #333;
             font-weight: bold;
         }
-        input, select, button {
+
+        input,
+        select,
+        button {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -42,6 +58,7 @@
             border-radius: 5px;
             font-size: 14px;
         }
+
         button {
             background-color: #007BFF;
             color: white;
@@ -49,23 +66,28 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         select {
             cursor: pointer;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
     </style>
 </head>
+
+
+<div class="page-header">
+    <h1>Login</h1>
+    <p class="header-message">Please enter your information to start our services!</p>
+</div>
+
 <body>
     <form action="/login" method="POST">
         <h1>Login</h1>
+        <p class="header-message">Please login with your information to start our services!</p>
+
         <!-- Name -->
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" placeholder="Enter your full name" required>
@@ -116,8 +138,10 @@
         <!-- Symptoms -->
         <label for="symptoms">Presence of Symptoms:</label>
         <select id="symptoms" name="symptoms">
-            <option value="Did not experience symptoms of anxiety/depression in the past 4 weeks">Did not experience symptoms of anxiety/depression in the past 4 weeks</option>
-            <option value="Experienced symptoms of anxiety/depression in past 4 weeks">Experienced symptoms of anxiety/depression in past 4 weeks</option>
+            <option value="Did not experience symptoms of anxiety/depression in the past 4 weeks">Did not experience
+                symptoms of anxiety/depression in the past 4 weeks</option>
+            <option value="Experienced symptoms of anxiety/depression in past 4 weeks">Experienced symptoms of
+                anxiety/depression in past 4 weeks</option>
         </select>
 
         <!-- Race/Ethnicity -->
@@ -127,7 +151,8 @@
             <option value="Non-Hispanic Asian, single race">Non-Hispanic Asian, single race</option>
             <option value="Non-Hispanic Black, single race">Non-Hispanic Black, single race</option>
             <option value="Non-Hispanic White, single race">Non-Hispanic White, single race</option>
-            <option value="Non-Hispanic, other races and multiple races">Non-Hispanic, other races and multiple races</option>
+            <option value="Non-Hispanic, other races and multiple races">Non-Hispanic, other races and multiple races
+            </option>
         </select>
 
         <!-- Sexual Orientation -->
@@ -197,4 +222,5 @@
         <button type="submit">Submit</button>
     </form>
 </body>
+
 </html>

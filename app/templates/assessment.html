@@ -1,0 +1,187 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<style>
+    .profile-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px auto;
+    }
+
+    .content-box {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        max-width: 300px;
+        width: 100%;
+        text-align: left;
+    }
+
+    .content-box h1 {
+        color: #007BFF;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .content-box p {
+        color: #333;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .page-header h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    a {
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Symptom Assessment Form</h1>
+</div>
+
+<div class="container">
+    <form action="/assessment" method="POST">
+        <!-- Section 1: I USE THE FOLLOWING -->
+        <h2>I USE THE FOLLOWING</h2>
+        {% for item in [
+        "Alcohol", "Nicotine (cigarettes)", "Marijuana", "Cocaine",
+        "Opiates", "Sedatives", "Hallucinogens", "Stimulants",
+        "Methamphetamines", "Other"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section1_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 2: MY EATING INVOLVES -->
+        <h2>MY EATING INVOLVES</h2>
+        {% for item in [
+        "Restriction of food consumption", "Bingeing and purging",
+        "Binge eating", "A lot of weight loss or gain"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section2_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 3: I HAVE -->
+        <h2>I HAVE</h2>
+        {% for item in [
+        "Concern about my sexual function", "Discomfort engaging in sexual activity",
+        "Questions about my sexual orientation"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section3_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 4: EMPLOYMENT & SELF CARE -->
+        <h2>EMPLOYMENT & SELF CARE</h2>
+        {% for item in [
+        "I have problems getting/keeping a job",
+        "I have problems paying for basic expenses",
+        "I am afraid of becoming homeless",
+        "I have problems accessing healthcare"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section4_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 5: I AM EXPERIENCING -->
+        <h2>I AM EXPERIENCING</h2>
+        {% for item in [
+        "Frequent worry or tension", "Fear of many things",
+        "Discomfort in social situations", "Feelings of guilt",
+        "Phobias: unusual fears about specific things",
+        "Panic attacks: Sweating, trembling, shortness of breath, heart palpitations",
+        "Recurring, distressing thoughts about a trauma",
+        '"Flashbacks" as if reliving the traumatic event',
+        "Avoiding people/places associated with trauma",
+        "Nightmares about traumatic experience"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section5_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 6: I AM FEELING -->
+        <h2>I AM FEELING</h2>
+        {% for item in [
+        "Decreased interest in pleasurable activities",
+        "Social isolation, loneliness", "Suicidal thoughts",
+        "Bereavement or feelings of loss",
+        "Changes in sleep (too much or not enough)",
+        "Normal, daily tasks require more effort",
+        "Sad, hopeless about future", "Excessive feelings of guilt",
+        "Low self-esteem"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section6_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 7: I NOTICE (Section 1) -->
+        <h2>I NOTICE</h2>
+        {% for item in [
+        "Memory problems or trouble concentrating",
+        "Trouble explaining myself to others",
+        "Problems understanding what others tell me",
+        "Intrusive or strange thoughts", "Obsessive thoughts"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section7_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Section 8: I NOTICE (Section 2) -->
+        <h2>I NOTICE</h2>
+        {% for item in [
+        "Been hearing voices when alone",
+        "Problems with my speech", "Risk-taking behaviors",
+        "Compulsive or repetitive behaviors",
+        "Been acting without concern for consequence",
+        "Been physically harming myself",
+        "Been violent toward others"] %}
+        <div>
+            <label>{{ item }}</label><br>
+            {% for option, score in [("Never", 1), ("Rarely", 2), ("Often", 3), ("Always", 4)] %}
+            <label><input type="radio" name="section8_{{ item }}" value="{{ score }}" required> {{ option }}</label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock content %}

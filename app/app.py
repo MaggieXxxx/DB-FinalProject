@@ -206,6 +206,36 @@ def validate_login():
     flash('Login successful!', 'success')
     return redirect(url_for('home'))
 
+
+@app.route('/assessment', methods=['GET', 'POST'])
+def assessment():
+    if request.method == 'POST':
+        # Debug: Print form responses
+        responses = request.form.to_dict()
+        print("Form Responses:", responses)
+
+        # Initialize section scores
+        scores = {}
+
+        # Calculate scores
+        for question, value in responses.items():
+            section = question.split('_')[0]  # Extract the section from the question name
+            if section not in scores:
+                scores[section] = []
+            scores[section].append(int(value))
+
+        # Calculate averages and total score
+        section_averages = {section: np.mean(values) for section, values in scores.items()}
+        total_score = np.sum(list(section_averages.values()))
+
+        return render_template('result.html', total_score=total_score, section_averages=section_averages)
+
+    return render_template('assessment.html')
+
+@app.route('/result')
+def result():
+    return render_template('result.html')
+
 @app.route('/home')
 def home():
     patient = session.get('patient')

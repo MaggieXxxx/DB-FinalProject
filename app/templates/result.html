@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div style="text-align: center; margin-top: 40px;">
+    <!-- Title -->
+    <h1>Assessment Results</h1>
+
+    <!-- Total Score -->
+    <p style="font-size: 20px; margin: 20px 0;"><strong>Total Score:</strong> {{ total_score }}</p>
+
+    <!-- Section Scores -->
+    <h2 style="margin-bottom: 10px;">Section Scores</h2>
+    <ul style="list-style-type: disc; text-align: center; display: inline-block; padding: 0; margin: 0;">
+        {% for section, score in section_averages.items() %}
+        <li style="font-size: 18px; margin: 5px 0; text-align: left;">{{ section }}: {{ score }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Button to Generate Subscription Plan -->
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('generate_quote') }}"
+            style="text-decoration: none; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; font-size: 18px;">
+            Generate Subscription Plan
+        </a>
+    </div>
+</div>
+{% endblock content %}

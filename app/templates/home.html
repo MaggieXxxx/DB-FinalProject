@@ -4,12 +4,27 @@
 <div class="container">
     <div class="content-box" id="welcome">
         {% if patient %}
-            <h1>Welcome, {{ session['patient']['Name'] }}!</h1>
-            <p>Select an option from the navigation menu to get started.</p>
+        <h1>Welcome, {{ session['patient']['Name'] }}!</h1>
+        <p>Select an option from the navigation menu to get started.</p>
         {% else %}
-            <h1>Welcome!</h1>
-            <p>Please log in to view your profile.</p>
+        <h1>Welcome!</h1>
+        <p>Please log in to view your profile.</p>
         {% endif %}
+
+        <!-- Reminder Section -->
+        <div
+            style="margin-top: 20px; padding: 10px; border: 1px solid #28a745; background-color: #e9f5ec; border-radius: 5px;">
+            <p style="font-size: 0.9em; color: #155724;">
+                <strong>Note:</strong> Please remember to complete your symptom assessment to better tailor our services
+                to your needs.
+            </p>
+            <p style="font-size: 0.9em; color: #155724;">
+                Click the button below to start your assessment:
+            </p>
+            <a href="{{ url_for('assessment') }}" class="btn"
+                style="text-decoration: none; padding: 8px 16px; background-color: #28a745; color: white; border-radius: 5px; font-size: 0.9em;">Go
+                to Assessment</a>
+        </div>
     </div>
 </div>
 {% endblock content %}
