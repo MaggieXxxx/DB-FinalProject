@@ -3,6 +3,7 @@
 Team Members: Maggie Xu (jx1206), Lia Wang (rw2618), Ziyu Qi (zq2127)
 
 ## Demo of Mental Health Subscription Plan Recommender
+![](https://github.com/MaggieXxxx/DB-FinalProject/blob/main/Demo.gif)
 
 ## Description
 This project leverages machine learning to recommend personalized subscription plans for mental health care based on demographic, personal, and historical data. Users input details such as age, gender, state, and symptoms of mental health conditions, and the system predicts the most suitable plan using a trained model. The application is built with Flask, and the predictions are powered by a Random Forest model trained on a subgroup-based dataset.
