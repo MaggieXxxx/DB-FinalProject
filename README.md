@@ -39,6 +39,7 @@ http://127.0.0.1:5000/
 #### 3.	Use the login form to enter demographic details and generate a personalized subscription plan.
 
 ### Project Structure
+```plaintext
 ├── README.md                        # Project description and instructions
 ├── app                              # Main application folder
 │   ├── __pycache__                  # Compiled Python cache files
@@ -63,10 +64,10 @@ http://127.0.0.1:5000/
 └── data                             # Dataset folder
     └── Mental_Health_Care_in_the_Last_4_Weeks.csv
                                       # Demographic data for training and predictions
-
+```
 
 ### Dataset
-* The dataset (Mental_Health_Care_in_the_Last_4_Weeks.csv) contains demographic subgroup information and mental health care outcomes. Key fields include:
-	•	Group/Subgroup Features: Age, Sex, Disability Status, etc.
-	•	Indicator: Outcomes related to mental health care.
+* The dataset (Mental_Health_Care_in_the_Last_4_Weeks.csv) contains demographic subgroup information and mental health care outcomes. Key fields include:\
+	•	Group/Subgroup Features: Age, Sex, Disability Status, etc.\
+	•	Indicator: Outcomes related to mental health care.\
 	•	Value: Metrics used for scaling in the prediction process.
