@@ -154,21 +154,40 @@ def validate_login():
     """
     Validate the user's login details, create a single table for all users, and insert/update data.
     """
+     # Preprocess the dataset
+    data = preprocess_data(DATA_PATH)
+
     # Collect user input from the login form
     user_input = {
         "Age": request.form.get('age'),
         "Sex": request.form.get('sex'),
-        "Disability_status": request.form.get('disability_status'),
+        "Disability Status": request.form.get('disability_status'),
         "Education": request.form.get('education'),
-        "Gender_identity": request.form.get('gender_identity'),
+        "Gender Identity": request.form.get('gender_identity'),
         "Symptoms": request.form.get('symptoms'),
         "Race": request.form.get('race'),
-        "Sexual_Orientation": request.form.get('sexual_orientation'),
+        "Sexual Orientation": request.form.get('sexual_orientation'),
         "State": request.form.get('state'),
         "Name": request.form.get('name')
     }
 
     print("User Input:", user_input)  # Debugging
+    print("Dataset Columns:", data.columns)
+    # Initialize dummy input with zeroes
+    dummy_input = pd.DataFrame(0, index=[0], columns=dummy_columns)
+    # Iterate over each feature in user input and scale matched features
+    for key, value in user_input.items():
+        if key == "Name":  # Skip name since it doesn't correspond to a dataset column
+            continue
+        column_name = f"Group_Subgroup_By {key}_{value}"
+        if column_name in data.columns:
+            # Find matching rows for this feature
+            matching_rows = data[data[column_name] == 1]
+            if not matching_rows.empty:
+                # Scale the dummy variable by the corresponding 'Value'
+                dummy_input[column_name] = matching_rows['Value'].median()
+                print(f"Scaled {column_name} with median value {matching_rows['Value'].median()}")
+
 
     # Database logic
     try:
@@ -207,23 +226,26 @@ def validate_login():
             WHERE Name = ?;
             """
             cursor.execute(update_query, (
-                user_input['Age'], user_input['Sex'], user_input['Disability_status'], user_input['Education'],
-                user_input['Gender_identity'], user_input['Symptoms'], user_input['Race'], user_input['Sexual_Orientation'],
+                user_input['Age'], user_input['Sex'], user_input['Disability Status'], user_input['Education'],
+                user_input['Gender Identity'], user_input['Symptoms'], user_input['Race'], user_input['Sexual Orientation'],
                 user_input['State'], user_input['Name']
             ))
             flash('User data updated successfully!', 'success')
         else:
+            print(f"Column {column_name} does not exist in the dataset.")
+
             # Insert new record
             insert_query = """
             INSERT INTO user_data (Name, Age, Sex, Disability_status, Education, Gender_identity, Symptoms, Race, Sexual_Orientation, State)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """
             cursor.execute(insert_query, (
-                user_input['Name'], user_input['Age'], user_input['Sex'], user_input['Disability_status'], user_input['Education'],
-                user_input['Gender_identity'], user_input['Symptoms'], user_input['Race'], user_input['Sexual_Orientation'],
+                user_input['Name'], user_input['Age'], user_input['Sex'], user_input['Disability Status'], user_input['Education'],
+                user_input['Gender Identity'], user_input['Symptoms'], user_input['Race'], user_input['Sexual Orientation'],
                 user_input['State']
             ))
             flash('User data saved successfully!', 'success')
+
 
         conn.commit()  # Commit changes
     except sqlite3.Error as e:
@@ -232,9 +254,20 @@ def validate_login():
     finally:
         conn.close()
 
+    # If the dummy input remains all zeros, it means no match was found
+    if dummy_input.sum().sum() == 0:
+        flash("No matching demographic data found. Please check your inputs.", "error")
+        return redirect(url_for('login'))
+    # Debug: Print the final dummy input
+    print("Final Dummy Input for Model:")
+    print(dummy_input)
+
     # Store user details in session
     session['patient'] = user_input
+    session['dummy_input'] = dummy_input.to_dict(orient='records')[0]
 
+
+    flash('Login successful!', 'success')
     return redirect(url_for('home'))
 
 
