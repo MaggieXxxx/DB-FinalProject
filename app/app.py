@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
+import sqlite3
 from utils import preprocess_data  # Import the function
 
 # Initialize Flask application
@@ -13,6 +14,7 @@ app.secret_key = 'your_secret_key'
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, 'models/model.pkl')
 DATA_PATH = os.path.join(BASE_DIR, '../data/Mental_Health_Care_in_the_Last_4_Weeks.csv')
+DB_PATH = os.path.join(BASE_DIR, '../data/mhealth.db')
 
 # Load model
 with open(MODEL_PATH, 'rb') as model_file:
@@ -150,61 +152,91 @@ def login():
 @app.post('/login')
 def validate_login():
     """
-    Validate the user's login details and preprocess input to match dummy columns.
+    Validate the user's login details, create a single table for all users, and insert/update data.
     """
-    # Preprocess the dataset
-    data = preprocess_data(DATA_PATH)
-
     # Collect user input from the login form
     user_input = {
         "Age": request.form.get('age'),
         "Sex": request.form.get('sex'),
-        "Disability status": request.form.get('disability_status'),
+        "Disability_status": request.form.get('disability_status'),
         "Education": request.form.get('education'),
-        "Gender identity": request.form.get('gender_identity'),
+        "Gender_identity": request.form.get('gender_identity'),
         "Symptoms": request.form.get('symptoms'),
-        "Race": request.form.get('race'),  # Simplify key
-        "Sexual Orientation": request.form.get('sexual_orientation'),
+        "Race": request.form.get('race'),
+        "Sexual_Orientation": request.form.get('sexual_orientation'),
         "State": request.form.get('state'),
         "Name": request.form.get('name')
     }
 
-    print("User Input:", user_input)
-    print("Dataset Columns:", data.columns)
+    print("User Input:", user_input)  # Debugging
 
-    # Initialize dummy input with zeroes
-    dummy_input = pd.DataFrame(0, index=[0], columns=dummy_columns)
+    # Database logic
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
 
-    # Iterate over each feature in user input and scale matched features
-    for key, value in user_input.items():
-        if key == "Name":  # Skip name since it doesn't correspond to a dataset column
-            continue
-        column_name = f"Group_Subgroup_By {key}_{value}"
-        if column_name in data.columns:
-            # Find matching rows for this feature
-            matching_rows = data[data[column_name] == 1]
-            if not matching_rows.empty:
-                # Scale the dummy variable by the corresponding 'Value'
-                dummy_input[column_name] = matching_rows['Value'].median()
-                print(f"Scaled {column_name} with median value {matching_rows['Value'].median()}")
+        # Create a single table for all users if it doesn't exist
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS user_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name TEXT UNIQUE,
+            Age TEXT,
+            Sex TEXT,
+            Disability_status TEXT,
+            Education TEXT,
+            Gender_identity TEXT,
+            Symptoms TEXT,
+            Race TEXT,
+            Sexual_Orientation TEXT,
+            State TEXT,
+            Assessment_Score REAL
+        );
+        """
+        cursor.execute(create_table_query)
+
+        # Check if the user already exists in the table
+        check_user_query = "SELECT * FROM user_data WHERE Name = ?"
+        cursor.execute(check_user_query, (user_input['Name'],))
+        user_exists = cursor.fetchone()
+
+        if user_exists:
+            # Update existing record
+            update_query = """
+            UPDATE user_data
+            SET Age = ?, Sex = ?, Disability_status = ?, Education = ?, Gender_identity = ?, Symptoms = ?, Race = ?, Sexual_Orientation = ?, State = ?
+            WHERE Name = ?;
+            """
+            cursor.execute(update_query, (
+                user_input['Age'], user_input['Sex'], user_input['Disability_status'], user_input['Education'],
+                user_input['Gender_identity'], user_input['Symptoms'], user_input['Race'], user_input['Sexual_Orientation'],
+                user_input['State'], user_input['Name']
+            ))
+            flash('User data updated successfully!', 'success')
         else:
-            print(f"Column {column_name} does not exist in the dataset.")
+            # Insert new record
+            insert_query = """
+            INSERT INTO user_data (Name, Age, Sex, Disability_status, Education, Gender_identity, Symptoms, Race, Sexual_Orientation, State)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """
+            cursor.execute(insert_query, (
+                user_input['Name'], user_input['Age'], user_input['Sex'], user_input['Disability_status'], user_input['Education'],
+                user_input['Gender_identity'], user_input['Symptoms'], user_input['Race'], user_input['Sexual_Orientation'],
+                user_input['State']
+            ))
+            flash('User data saved successfully!', 'success')
 
-    # If the dummy input remains all zeros, it means no match was found
-    if dummy_input.sum().sum() == 0:
-        flash("No matching demographic data found. Please check your inputs.", "error")
-        return redirect(url_for('login'))
+        conn.commit()  # Commit changes
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        flash("An error occurred while saving your data. Please try again.", "error")
+    finally:
+        conn.close()
 
-    # Debug: Print the final dummy input
-    print("Final Dummy Input for Model:")
-    print(dummy_input)
-
-    # Store user details and dummy input in session
+    # Store user details in session
     session['patient'] = user_input
-    session['dummy_input'] = dummy_input.to_dict(orient='records')[0]
 
-    flash('Login successful!', 'success')
     return redirect(url_for('home'))
+
 
 
 @app.route('/assessment', methods=['GET', 'POST'])
@@ -227,6 +259,30 @@ def assessment():
         # Calculate averages and total score
         section_averages = {section: np.mean(values) for section, values in scores.items()}
         total_score = np.sum(list(section_averages.values()))
+
+        # Store assessment score in the database
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+
+            # Debug: Print update query data
+            print(f"Updating Assessment_Score for {session['patient']['Name']} with score {total_score}")
+
+            # Update user's assessment score
+            update_score_query = """
+            UPDATE user_data
+            SET Assessment_Score = ?
+            WHERE Name = ?;
+            """
+            cursor.execute(update_score_query, (total_score, session['patient']['Name']))
+
+            conn.commit()
+            print("Assessment_Score updated successfully!")
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            flash("An error occurred while saving your assessment score. Please try again.", "error")
+        finally:
+            conn.close()
 
         return render_template('result.html', total_score=total_score, section_averages=section_averages)
 
